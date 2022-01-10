@@ -39,7 +39,7 @@ for x in range(size_x):
 
 
 
-distance_list = [[None for _ in range(resolution_y)] for _ in range(resolution_x)]
+distance_list = [[i*j for i in range(resolution_y)] for j in range(resolution_x)]
 
 
 
@@ -63,5 +63,8 @@ distance_list = [[None for _ in range(resolution_y)] for _ in range(resolution_x
 
 
 ascii_color_list = list("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,^`'.")
-
-print(ascii_color_list)
+for line in distance_list:
+    for element in line:
+        print(ascii_color_list[int(element) % len(ascii_color_list)], end="")
+    print("")
+print(*ascii_color_list)
