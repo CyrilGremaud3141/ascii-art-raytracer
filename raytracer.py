@@ -5,18 +5,19 @@ import time
 import numpy as np
 from PIL import Image
 # -------------------------------
-resolution_x = 400
-resolution_y = 400
+resolution_x = 7200
+resolution_y = 1200
 render_distance = 100
 
-player_pos_x = 150
-player_pos_y = 150
-player_pos_z = 150
+player_pos_x = 160
+player_pos_y = 160
+player_pos_z = 160
 
 player_angle_x = 0
 player_angle_y = 0
 
-fov = 60
+fov_x = 360
+fov_y = 60
 
 size_x = 40
 size_y = 40
@@ -60,8 +61,11 @@ for i in range(180):
 
     for pix_x in tqdm(range(resolution_x)):
         for pix_y in range(resolution_y):
-            ray_angle_phi = ((player_angle_x - (0.5 * fov)) + (pix_x * (fov / resolution_x)))
-            ray_angle_theta = ((player_angle_y - (0.5 * fov)) + (pix_y * (fov / resolution_y)))
+            ray_angle_phi = ((player_angle_x - (0.5 * fov_x)) + (pix_x * (fov_x / resolution_x)))
+            ray_angle_theta = ((player_angle_y - (0.5 * fov_y)) + (pix_y * (fov_y / resolution_y)))
+
+            ray_angle_phi %= 360
+            ray_angle_theta %= 360
 
             dis_x = None
             dis_y = None
@@ -136,7 +140,7 @@ for i in range(180):
                     dis_x = -1
 
             if dis_x != -1:
-                dis_x = dis_x * cos(ray_angle_theta) * cos(ray_angle_phi)
+                dis_x = dis_x
 
             # calculate distance y 
             if dis_y != -1:
@@ -174,7 +178,7 @@ for i in range(180):
                     dis_y = -1
 
             if dis_y != -1:
-                dis_y = dis_y * cos(ray_angle_theta) * cos(ray_angle_phi)
+                dis_y = dis_y
 
             #calculate distance z 
             if dis_z != -1:
@@ -213,8 +217,7 @@ for i in range(180):
                     dis_z = -1
 
             if dis_z != -1:
-                dis_z = dis_z * cos(ray_angle_theta) * cos(ray_angle_phi)
-
+                dis_z = dis_z
             
             # dis_z = 1000
             # dis_y = 1000
@@ -231,10 +234,13 @@ for i in range(180):
                 color = [255, 255, 255]
             elif dis_x == min([dis_x, dis_y, dis_z]):
                 color = [dis_x, 0, 0]
+                color = [255, 0, 0]
             elif dis_y == min([dis_x, dis_y, dis_z]):
                 color = [0, dis_y, 0]
+                color = [0, 255, 0]
             elif dis_z == min([dis_x, dis_y, dis_z]):
                 color = [0, 0, dis_z]
+                color = [0, 0, 255]
 
             distance_list[pix_x][pix_y] = color
 
@@ -248,7 +254,7 @@ for i in range(180):
 
     array = np.array(distance_list ,dtype=np.uint8)
     image = Image.fromarray(array)
-    image = image.rotate(90)
+    image = image.rotate(90, expand=True)
     image.save("moin.png")
 
     # ascii_color_list = list("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,^`'.")
@@ -262,8 +268,8 @@ for i in range(180):
     # with open("output.txt", "w") as f:
     #     f.writelines(screen)
     exit()
-    time.sleep(1)
-    player_angle_x += 5
+    player_angle_x += 15
+    print(player_angle_x)
 
 
 
