@@ -13,8 +13,8 @@ player_pos_x = 150
 player_pos_y = 150
 player_pos_z = 150
 
-player_angle_x = 40
-player_angle_y = 20
+player_angle_x = 0
+player_angle_y = 0
 
 fov = 60
 
@@ -193,9 +193,9 @@ for i in range(180):
                 
 
                 for block in range(render_distance):
-                    ray_z_block_x = int(ray_x_pos_x // block_size)
-                    ray_z_block_y = int(ray_x_pos_y // block_size)
-                    ray_z_block_z = int(ray_x_pos_z // block_size)
+                    ray_z_block_x = int(ray_z_pos_x // block_size)
+                    ray_z_block_y = int(ray_z_pos_y // block_size)
+                    ray_z_block_z = int(ray_z_pos_z // block_size)
 
                     # print(ray_x_block_x, ray_x_block_y, ray_x_block_z)
 
@@ -216,7 +216,7 @@ for i in range(180):
                 dis_z = dis_z * cos(ray_angle_theta) * cos(ray_angle_phi)
 
             
-            dis_z = 1000
+            # dis_z = 1000
             # dis_y = 1000
             # dis_x = 1000
             if dis_x == -1:
@@ -229,12 +229,13 @@ for i in range(180):
 
             if dis_x == dis_y == dis_z == 1000:
                 color = [255, 255, 255]
-            if dis_x == min([dis_x, dis_y, dis_z]):
+            elif dis_x == min([dis_x, dis_y, dis_z]):
                 color = [dis_x, 0, 0]
-            if dis_y == min([dis_x, dis_y, dis_z]):
+            elif dis_y == min([dis_x, dis_y, dis_z]):
                 color = [0, dis_y, 0]
-            if dis_z == min([dis_x, dis_y, dis_z]):
+            elif dis_z == min([dis_x, dis_y, dis_z]):
                 color = [0, 0, dis_z]
+
             distance_list[pix_x][pix_y] = color
 
 
@@ -247,6 +248,7 @@ for i in range(180):
 
     array = np.array(distance_list ,dtype=np.uint8)
     image = Image.fromarray(array)
+    image = image.rotate(90)
     image.save("moin.png")
 
     # ascii_color_list = list("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,^`'.")
