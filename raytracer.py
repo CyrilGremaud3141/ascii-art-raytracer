@@ -5,8 +5,8 @@ import time
 import numpy as np
 from PIL import Image
 # -------------------------------
-resolution_x = 7200
-resolution_y = 1200
+resolution_x = 500
+resolution_y = 500
 render_distance = 100
 
 player_pos_x = 160
@@ -16,7 +16,7 @@ player_pos_z = 160
 player_angle_x = 0
 player_angle_y = 0
 
-fov_x = 360
+fov_x = 60
 fov_y = 60
 
 size_x = 40
@@ -45,6 +45,10 @@ for x in range(size_x):
     for y in range(size_y):
         for z in range(size_z):
             number = random.random()
+            if x % 3 == 0 and y % 3 == 0 and z % 3 == 0:
+                number = 0
+            else:
+                number = 1
 
             if number < block_threshold:
                 room[x][y][z] = 1
@@ -64,8 +68,8 @@ for i in range(180):
             ray_angle_phi = ((player_angle_x - (0.5 * fov_x)) + (pix_x * (fov_x / resolution_x)))
             ray_angle_theta = ((player_angle_y - (0.5 * fov_y)) + (pix_y * (fov_y / resolution_y)))
 
-            ray_angle_phi %= 360
-            ray_angle_theta %= 360
+            # ray_angle_phi %= 360
+            # ray_angle_theta %= 360
 
             dis_x = None
             dis_y = None
@@ -106,14 +110,14 @@ for i in range(180):
             # calculate distance x
             if dis_x != -1:
                 ray_x_pos_x = player_pos_x + (dis_to_block_border_x * x_multiplier)
-                ray_x_pos_y = player_pos_y + ((dis_to_block_border_x * tan(ray_angle_phi)) * y_multiplier)
-                ray_x_pos_z = player_pos_z + ((dis_to_block_border_x / cos(ray_angle_phi)) * tan(ray_angle_theta) * z_multiplier)
+                ray_x_pos_y = player_pos_y + ((dis_to_block_border_x * tan(ray_angle_phi)))
+                ray_x_pos_z = player_pos_z + ((dis_to_block_border_x / cos(ray_angle_phi)) * tan(ray_angle_theta))
 
                 dis_x = (dis_to_block_border_x / cos(ray_angle_phi)) / cos(ray_angle_theta)
 
                 ray_x_offset_x = block_size * x_multiplier
-                ray_x_offset_y = ((block_size * tan(ray_angle_phi)) * y_multiplier)
-                ray_x_offset_z = ((block_size / cos(ray_angle_phi)) * tan(ray_angle_theta) * z_multiplier)
+                ray_x_offset_y = ((block_size * tan(ray_angle_phi)))
+                ray_x_offset_z = ((block_size / cos(ray_angle_phi)) * tan(ray_angle_theta))
 
                 dis_x_offset = (block_size / cos(ray_angle_phi)) / cos(ray_angle_theta)
 
@@ -144,15 +148,15 @@ for i in range(180):
 
             # calculate distance y 
             if dis_y != -1:
-                ray_y_pos_x = player_pos_x + ((dis_to_block_border_y * cotan(ray_angle_phi)) * x_multiplier)
+                ray_y_pos_x = player_pos_x + ((dis_to_block_border_y * cotan(ray_angle_phi)))
                 ray_y_pos_y = player_pos_y + (dis_to_block_border_y * y_multiplier)
-                ray_y_pos_z = player_pos_z + ((dis_to_block_border_y / sin(ray_angle_phi)) * tan(ray_angle_theta) * z_multiplier)
+                ray_y_pos_z = player_pos_z + ((dis_to_block_border_y / sin(ray_angle_phi)) * tan(ray_angle_theta))
 
                 dis_y = (dis_to_block_border_x / sin(ray_angle_phi)) / cos(ray_angle_theta)
 
-                ray_y_offset_x = ((block_size * cotan(ray_angle_phi)) * x_multiplier)
+                ray_y_offset_x = ((block_size * cotan(ray_angle_phi)))
                 ray_y_offset_y = block_size * y_multiplier
-                ray_y_offset_z = ((block_size / sin(ray_angle_phi)) * tan(ray_angle_theta) * z_multiplier)
+                ray_y_offset_z = ((block_size / sin(ray_angle_phi)) * tan(ray_angle_theta))
 
                 dis_y_offset = (block_size / sin(ray_angle_phi)) / cos(ray_angle_theta)
 
@@ -182,14 +186,14 @@ for i in range(180):
 
             #calculate distance z 
             if dis_z != -1:
-                ray_z_pos_x = player_pos_x + (dis_to_block_border_z / tan(ray_angle_theta) * cos(ray_angle_phi) * x_multiplier)
-                ray_z_pos_y = player_pos_y + (dis_to_block_border_z / tan(ray_angle_theta) * sin(ray_angle_phi) * y_multiplier)
+                ray_z_pos_x = player_pos_x + (dis_to_block_border_z / tan(ray_angle_theta) * cos(ray_angle_phi))
+                ray_z_pos_y = player_pos_y + (dis_to_block_border_z / tan(ray_angle_theta) * sin(ray_angle_phi))
                 ray_z_pos_z = player_pos_z + (dis_to_block_border_z * z_multiplier)
 
                 dis_z = (dis_to_block_border_z / sin(ray_angle_theta))
 
-                ray_z_offset_x = (block_size / tan(ray_angle_theta) * cos(ray_angle_phi) * x_multiplier)
-                ray_z_offset_y = (block_size / tan(ray_angle_theta) * sin(ray_angle_phi) * y_multiplier)
+                ray_z_offset_x = (block_size / tan(ray_angle_theta) * cos(ray_angle_phi))
+                ray_z_offset_y = (block_size / tan(ray_angle_theta) * sin(ray_angle_phi))
                 ray_z_offset_z = (block_size * z_multiplier)
 
                 dis_z_offset = (block_size / sin(ray_angle_theta))
