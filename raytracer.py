@@ -259,7 +259,7 @@ for i in range(180):
     array = np.array(distance_list ,dtype=np.uint8)
     image = Image.fromarray(array)
     image = image.rotate(90, expand=True)
-    image.save("moin.png")
+    image.save("render.png")
 
     # ascii_color_list = list("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,^`'.")
     # screen = []
